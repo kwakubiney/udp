@@ -24,14 +24,14 @@ var errHandshakeFailed = errors.New("handshake failed")
 //	defer lim.Stop()
 //
 //	nettest.TestConn(t, func() (c1, c2 net.Conn, stop func(), err error) {
-//		listener, c1, c2, err = pipe()
+//		Listener, c1, c2, err = pipe()
 //		if err != nil {
 //			return nil, nil, nil, err
 //		}
 //		stop = func() {
 //			c1.Close()
 //			c2.Close()
-//			listener.Close(1 * time.Second)
+//			Listener.Close(1 * time.Second)
 //		}
 //		return
 //	})
@@ -143,7 +143,7 @@ func TestListenerCloseUnaccepted(t *testing.T) {
 
 	time.Sleep(100 * time.Millisecond) // Wait all packets being processed by readLoop
 
-	// Unaccepted connections must be closed by listener.Close()
+	// Unaccepted connections must be closed by Listener.Close()
 	err = listener.Close()
 	if err != nil {
 		t.Fatal(err)
@@ -385,7 +385,7 @@ func TestConnClose(t *testing.T) {
 			t.Errorf("Failed to close B side: %v", err)
 		}
 		if err := l.Close(); err != nil {
-			t.Errorf("Failed to close listener: %v", err)
+			t.Errorf("Failed to close Listener: %v", err)
 		}
 	})
 	t.Run("CloseError1", func(t *testing.T) {
@@ -398,7 +398,7 @@ func TestConnClose(t *testing.T) {
 			t.Fatal(errPipe)
 		}
 		// Close l.pConn to inject error.
-		if err := l.(*listener).pConn.Close(); err != nil { //nolint:forcetypeassert
+		if err := l.(*Listener).pConn.Close(); err != nil { //nolint:forcetypeassert
 			t.Error(err)
 		}
 
@@ -422,7 +422,7 @@ func TestConnClose(t *testing.T) {
 			t.Fatal(errPipe)
 		}
 		// Close l.pConn to inject error.
-		if err := l.(*listener).pConn.Close(); err != nil { //nolint:forcetypeassert
+		if err := l.(*Listener).pConn.Close(); err != nil { //nolint:forcetypeassert
 			t.Error(err)
 		}
 
@@ -430,7 +430,7 @@ func TestConnClose(t *testing.T) {
 			t.Errorf("Failed to close A side: %v", err)
 		}
 		if err := l.Close(); err != nil {
-			t.Errorf("Failed to close listener: %v", err)
+			t.Errorf("Failed to close Listener: %v", err)
 		}
 		if err := ca.Close(); err == nil {
 			t.Errorf("Error is not propagated to Conn.Close")
@@ -473,7 +473,7 @@ func TestConnClose(t *testing.T) {
 			t.Errorf("Failed to close A side: %v", err)
 		}
 		if err := l.Close(); err != nil {
-			t.Errorf("Failed to close listener: %v", err)
+			t.Errorf("Failed to close Listener: %v", err)
 		}
 	})
 }
